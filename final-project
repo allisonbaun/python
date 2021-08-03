@@ -1,0 +1,327 @@
+'''
+Allison Baun
+Class 2 
+Game Design with Python
+12/23/20
+Candy Catcher
+Catch the desserts in your basket while avoiding bombs
+'''
+
+import pygame, sys, random
+from pygame.locals import *
+
+#initialize the game
+pygame.init()
+
+#make some constants
+SCREENWIDTH = 700
+SCREENHEIGHT = 500
+WHITE = (255, 255, 255)
+RED = (255,   0,   0)
+GREEN = (  0, 255,   0)
+BLUE = (204, 255, 255)
+BLACK = (  0,   0,   0)
+YELLOW = (255, 255, 153)
+PINK = (255, 204, 204)
+
+#define game method
+def game():
+  #define globals
+  global screen
+  global candyImage, candyX, candyY, candyHitBox
+  global cookieImage, cookieX, cookieY, cookieSpeed, cookieHitBox
+  global cupcakeImage, cupcakeX, cupcakeY, cupcakeHitBox
+  global basketImage, basketX, basketY, basketHitBox
+  global bombImage, bombX, bombY, bombHitBox
+  global score, level
+
+  score = 0
+  level = 0
+  
+  #creating the screen
+  screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+
+  cookieSpeed = random.randint(1,2)
+
+  candyImage = pygame.image.load("candy.png")
+  candyImage = pygame.transform.scale(candyImage, (80, 80))
+  candyX = 250
+  candyY = -200
+
+  cookieImage = pygame.image.load("cookie.png")
+  cookieImage = pygame.transform.scale(cookieImage, (80, 80))
+  cookieX = 400
+  cookieY = -400
+
+  cupcakeImage = pygame.image.load("cupcake.png")
+  cupcakeImage = pygame.transform.scale(cupcakeImage, (80, 80))
+  cupcakeX = 350
+  cupcakeY = -300
+
+  basketImage = pygame.image.load("basket.png")
+  basketImage = pygame.transform.scale(basketImage, (150, 150))
+  basketX = 300
+  basketY = 400
+
+  bombImage = pygame.image.load("bomb.png")
+  bombImage = pygame.transform.scale(bombImage, (80, 80))
+  bombX = 100
+  bombY = -400
+
+#define hitboxes for each object
+  candyHitBox = pygame.Rect(candyX, candyY, 80, 80)
+  pygame.draw.rect(screen, BLACK, candyHitBox, 1)
+  cookieHitBox = pygame.Rect(cookieX, cookieY, 80, 80)
+  pygame.draw.rect(screen, BLACK, cookieHitBox, 1)
+  cupcakeHitBox = pygame.Rect(cupcakeX, cupcakeY, 80, 80)
+  pygame.draw.rect(screen, BLACK, cupcakeHitBox, 1)
+  basketHitBox = pygame.Rect(basketX, basketY, 150, 150)
+
+  bombHitBox = pygame.Rect(bombX, bombY, 80, 80)
+  pygame.draw.rect(screen, BLACK, bombHitBox, 1)
+  
+
+  #creating game loop
+  while True:
+    if level == 0:
+      #HANDLE EVENTS
+      handleMenuKeyboardEvents()
+      #UPDATE GAME STATE
+      #DRAW SCREEN
+      drawMenu()
+
+    if level == 1:
+      #HANDLE ALL THE EVENTS
+      handleKeyboardEvents()
+      #UPDATE GAME STATE
+      moveObjects()
+      collisions()
+      #DRAW SCREEN
+      drawScene()
+      drawObjects()
+      drawBasket()
+    
+    if level == 2:
+      handleEndKeyboardEvents()
+      drawEnd()
+
+    pygame.display.update()
+
+
+#handle keyboard events for end menu
+def handleEndKeyboardEvents():
+  global level
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      sys.exit()
+  key = pygame.key.get_pressed()
+  if key[pygame.K_r]:
+    level = 0
+
+#draw end menu
+def drawEnd():
+  global screen
+  screen.fill(BLACK)
+  
+  fontObj = pygame.font.SysFont('arial', 64)
+  textSurfaceObj = fontObj.render("GAME OVER", True, RED, BLACK)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
+  screen.blit(textSurfaceObj, textRectObj)
+
+
+  fontObj1 = pygame.font.SysFont('arial', 24)
+  textSurfaceObj1 = fontObj1.render("Press r to return to Main Menu", True, RED, BLACK)
+  textRectObj1 = textSurfaceObj1.get_rect()
+  textRectObj1.center = (int(SCREENWIDTH/2), 400)
+  screen.blit(textSurfaceObj1, textRectObj1)
+
+
+#HANDLE MENU KEYBOARD EVENTS
+def handleMenuKeyboardEvents():
+  global level, score
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      sys.exit()
+  key = pygame.key.get_pressed()
+  if key[pygame.K_UP]:
+    level = 1
+
+#draw menu screen
+def drawMenu():
+  global screen
+  screen.fill(WHITE)
+  
+  fontObj = pygame.font.SysFont('oswald', 150)
+  textSurfaceObj = fontObj.render("Candy Catcher", True, PINK, WHITE)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), 150)
+  screen.blit(textSurfaceObj, textRectObj)
+  
+  
+
+  fontObj = pygame.font.SysFont('montserrat', 75)
+  textSurfaceObj = fontObj.render("Press UP to PLAY", True, BLUE, WHITE)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
+  screen.blit(textSurfaceObj, textRectObj)
+
+  #Instructions for game
+  fontObj = pygame.font.SysFont('arial', 25)
+  textSurfaceObj = fontObj.render("Use horizontal keys to move the basket.",True, BLACK, WHITE)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), 450)
+  screen.blit(textSurfaceObj, textRectObj)
+
+  fontObj = pygame.font.SysFont('arial', 25)
+  textSurfaceObj = fontObj.render("Catch the sweets before they hit the ground. ",True, BLACK, WHITE)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), 475)
+  screen.blit(textSurfaceObj, textRectObj)
+
+  fontObj = pygame.font.SysFont('arial', 25)
+  textSurfaceObj = fontObj.render("Avoid catching the bombs!",True, BLACK, WHITE)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (int(SCREENWIDTH/2), 500)
+  screen.blit(textSurfaceObj, textRectObj)
+
+
+#define method for collisions
+def collisions():
+  global basketHitBox, candyHitBox, candyX, candyY, cookieX, cookieY, cookieHitBox, cupcakeX, cupcakeY, cupcakeHitBox, bombHitBox, bombX, bombY, score, level
+  #basket and candy collide
+  if basketHitBox.colliderect(candyHitBox):
+    candyX = random.randint(0,SCREENWIDTH)
+    candyY = -150
+    score += 5
+
+  if basketHitBox.colliderect(cookieHitBox):
+    cookieX = random.randint(0,SCREENWIDTH)
+    cookieY = -150
+    score += 5
+
+  if basketHitBox.colliderect(cupcakeHitBox):
+    cupcakeX = random.randint(0,SCREENWIDTH)
+    cupcakeY = -150
+    score += 5
+
+  if basketHitBox.colliderect(bombHitBox):
+    bombX = random.randint(0,SCREENWIDTH)
+    bombY = 0
+    level = 2
+    score = 0
+
+    
+#define method for moving basket
+def handleKeyboardEvents():
+  global basketX, basketY
+  
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      sys.exit()
+#control vertical movement
+  key = pygame.key.get_pressed()
+  if key[pygame.K_UP]:
+    basketY -= 0
+  if key[pygame.K_DOWN]:
+    basketY += 0
+#control horizontal movement
+  if key[pygame.K_LEFT] and basketX > 1:
+    basketX -= 5
+  if key[pygame.K_RIGHT] and basketX < SCREENWIDTH-150:
+    basketX += 5
+
+#define background
+def drawScene():
+  global screen, score
+  screen.fill(YELLOW)
+  pygame.draw.rect(screen, BLUE, (0, 400, 800, 250),0)
+  pygame.draw.rect(screen, PINK, (0, 0, 800, 200),0)
+
+  fontObj = pygame.font.SysFont('arial', 32)
+  textSurfaceObj = fontObj.render("SCORE: " + str(score), True, BLUE, BLACK)
+  textRectObj = textSurfaceObj.get_rect()
+  textRectObj.center = (SCREENWIDTH - 100, 500)
+  screen.blit(textSurfaceObj, textRectObj)
+
+#draw candy
+def drawObjects():
+  global candyImage, candyX, candyY, candyHitBox
+  global cookieImage, cookieX, cookieY, cookieHitBox
+  global cupcakeImage, cupcakeX, cupcakeY, cupcakeHitBox
+  global bombImage, bombX, bombY, bombHitBox
+  screen.blit(candyImage, (candyX,candyY))
+  screen.blit(cookieImage, (cookieX,cookieY))
+  screen.blit(cupcakeImage, (cupcakeX,cupcakeY))
+  screen.blit(bombImage, (bombX,bombY))
+
+  candyHitBox = pygame.Rect(candyX, candyY, 80, 80)
+  #pygame.draw.rect(screen, BLACK, candyHitBox, 1)
+
+  cookieHitBox = pygame.Rect(cookieX, cookieY, 80, 80)
+  #pygame.draw.rect(screen, BLACK, cookieHitBox, 1)
+
+  cupcakeHitBox = pygame.Rect(cupcakeX, cupcakeY, 80, 80)
+  #pygame.draw.rect(screen, BLACK, cupcakeHitBox, 1)
+
+  bombHitBox = pygame.Rect(bombX, bombY, 80, 80)
+  #pygame.draw.rect(screen, BLACK, bombHitBox, 1)
+
+#define method for falling sweets
+def moveObjects():
+  global candyImage, candyX, candyY
+  global cookieImage, cookieX, cookieY, cookieSpeed
+  global cupcakeImage, cupcakeX, cupcakeY
+  global bombImage, bombX, bombY, bombHitBox
+  global score
+#randomize speed
+  
+  candyY = candyY + .75
+  cookieY = cookieY + .5 
+  cupcakeY = cupcakeY + .25
+  bombY = bombY + 1
+
+
+  if candyY > SCREENWIDTH:         
+    candyY = 0
+  if cookieY > SCREENWIDTH:
+    cookieY = 0
+    cookieSpeed = random.randint(1,2)
+  if cupcakeY > SCREENWIDTH:
+    cupcakeY = 0
+
+
+#randomize position it falls
+  if candyY > SCREENHEIGHT:
+    candyX = random.randint(0,SCREENWIDTH-150)
+    candyY = 0
+    score -=10
+
+  if cookieY > SCREENHEIGHT:
+    cookieX = random.randint(0,SCREENWIDTH-150)
+    cookieY = 0
+    score -=10
+
+  if cupcakeY > SCREENHEIGHT:
+    cupcakeX = random.randint(0,SCREENWIDTH-150)
+    cupcakeY = 0
+    score -=10
+
+  if bombY > SCREENHEIGHT:
+    bombX = random.randint(0,SCREENWIDTH-150)
+    bombY = 0
+
+#draw basket
+def drawBasket():
+  global basketImage, basketX, basketY, basketHitBox
+  screen.blit( basketImage, (basketX,basketY))
+
+  basketHitBox = pygame.Rect(basketX, basketY, 150, 150)
+  #test to see hitbox and comment out later
+  #pygame.draw.rect(screen, BLACK, basketHitBox, 1)
+ 
+
+game()
