@@ -1,0 +1,288 @@
+'''
+ALlison Baun
+Class 3 Python Game Design
+October 21 2020
+Clock program
+Write out the time
+'''
+
+#This line gives us a robot to use
+from karel.robota import UrRobot
+#The following lines gives us directions
+from karel.robota import North
+from karel.robota import South
+from karel.robota import East
+from karel.robota import West
+#This line gives us access to see a world
+from karel.robota import world
+#from karel.robota import *
+#Create your program after this line
+
+def task():
+  world.readWorld("Clock")
+  bob = Clocker(2,2,East,10000)
+
+  #input hours
+  bob.nine()
+  bob.three()
+  
+  #colon
+  bob.colon()
+
+  #input minutes
+  bob.five()
+  bob.seven()
+  
+
+  #turn off bob when robot is done writing the time
+  bob.turnOff()
+  
+    
+    #build some version of a robot
+class Clocker(UrRobot):
+  #define method for writing out one
+  def one(self):
+    self.move()
+    self.turnLeft()
+    self.verticalLine()
+    self.turnRight()
+    self.transitionDown()
+
+  #deifne method for writing out two
+  def two(self):
+    self.move()
+    self.horizontalTwo()
+    self.turnAround()
+    self.turnRight()
+    self.verticalThree()
+    self.turnRight()
+    self.middleConnection()
+    self.turnLeft()
+    self.verticalThree()
+    self.turnLeft()
+    self.move()
+    self.horizontalTwo()
+    self.turnAround()
+    self.transitionDown()
+    
+  #define method for writing out three
+  def three(self):
+    self.horizontalTwo()
+    self.move()
+    self.turnLeft()
+    self.verticalThree()
+    self.turnLeft()
+    self.move()
+    self.horizontalTwo()
+    self.turnAround()
+    self.turnLeft()
+    self.move()
+    self.verticalTwo()
+    self.turnLeft()
+    self.move()
+    self.horizontalTwo()
+    self.turnAround()
+    self.transitionDown()
+    
+  #define method for writing out four
+  def four(self):
+    self.move()
+    self.move()
+    self.turnLeft()
+    self.verticalLine()
+    self.turnAround()
+    self.turnRight()
+    self.middleConnection()
+    self.turnRight()
+    self.putBeeper()
+    self.move()
+    self.verticalTwo()
+    self.turnRight()
+    self.move()
+    self.move()
+    self.transitionDown()
+
+  #define method for writing out five
+  def five(self):
+    self.horizontalTwo()
+    self.move()
+    self.turnLeft()
+    self.verticalThree()
+    self.turnLeft()
+    self.middleConnection()
+    self.turnRight()
+    self.verticalThree()
+    self.turnRight()
+    self.move()
+    self.horizontalTwo()
+    self.transitionDown()
+
+  #define method for writing out six
+  def six(self):
+    self.turnLeft()
+    self.move()
+    self.move()
+    self.turnRight()
+    self.move()
+    self.horizontalTwo()
+    self.turnRight()
+    self.middleConnection()
+    self.turnRight()
+    self.horizontalTwo()
+    self.move()
+    self.turnRight()
+    self.verticalLine()
+    self.turnRight()
+    self.move()
+    self.horizontalTwo()
+    self.transitionDown()
+
+  #define method for writing out seven
+  def seven(self):
+    self.move()
+    self.move()
+    self.turnLeft()
+    self.verticalLine()
+    self.turnLeft()
+    self.move()
+    self.horizontalTwo()
+    self.turnAround()
+    self.transitionDown()
+    
+  #define method for writing out eight
+  def eight(self):
+    self.turnLeft()
+    self.verticalLine()
+    self.turnRight()
+    self.move()
+    self.putBeeper()
+    self.turnRight()
+    self.move()
+    self.middleConnection()
+    self.move()
+    self.putBeeper()
+    self.turnLeft()
+    self.move()
+    self.turnLeft()
+    self.verticalLine()
+    self.turnRight()
+    self.transitionDown()
+
+  #define method for writing out nine
+  def nine(self):
+    self.move()
+    self.move()
+    self.turnLeft()
+    self.verticalLine()
+    self.turnLeft()
+    self.move()
+    self.horizontalTwo()
+    self.turnLeft()
+    self.middleConnection()
+    self.turnLeft()
+    self.horizontalTwo()
+    self.move()
+    self.turnLeft()
+    self.move()
+    self.move()
+    self.turnRight()
+    self.transitionDown()
+
+
+  #define method for vertical line of 5 beepers
+  def verticalLine(self):
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+  
+  #define method for placing 3 beepers horizontally
+  def horizontalThree(self):
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+  
+  #define method for placing 2 beepers horizontally
+  def horizontalTwo(self):
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+
+  #define method for placing 3 beepers vertically
+  def verticalThree(self):
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+  
+  #define method for placing 2 beepers vertically
+  def verticalTwo(self):
+    self.putBeeper()
+    self.move()
+    self.putBeeper()
+
+
+  #define method for placing one beeper in between segments
+  def middleConnection(self):
+    self.move()
+    self.putBeeper()
+    self.move()
+
+  #define 180 degree move
+  def spin(self):
+    self.turnLeft()
+    self.turnLeft()
+
+  #define turning around method and moving 2 blocks
+  def turnAround(self):
+    self.spin()
+    self.move()
+    self.move()
+
+  #define method for moving from top of one number to the bottome of the next
+  def transitionDown(self):
+    self.move()
+    self.turnRight()
+    self.move()
+    self.move()
+    self.move()
+    self.move()
+    self.turnLeft()
+    self.move()
+    
+
+  #define turn right method
+  def turnRight(self):
+    self.turnLeft()
+    self.turnLeft()
+    self.turnLeft()
+
+
+  #define colon
+  def colon(self):
+    self.turnLeft()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.move()
+    self.putBeeper()
+    self.move()
+    self.turnRight()
+    self.transitionDown()
+
+
+
+
+#Don't write anything after this line
+if __name__ == '__main__' :    
+    from karel.robota import window
+    world.setSize(19,19)
+    window().run(task) #the robot is created within "task"
