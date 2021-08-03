@@ -1,0 +1,59 @@
+'''
+Allison Baun
+Class 2 Game Design w Python
+November 30 2020
+Mad Lib program - Christmas Baking
+'''
+
+def inputTask():
+  global bakedGood, familyMember, verb, ingredient, age, place, foodOne, numberBox,foodTwo, beverage, money, priceOne, priceTwo, priceThree, totalCost, room, temperature, minutes
+
+  bakedGood = input("Enter a plural baked good: ")
+  familyMember = input("Enter a family member: ")
+  verb = input("Enter a verb: ")
+  ingredient = input("Enter an ingredient: ")
+  age = int(input("Enter an integer: "))
+  place = input("Enter a place: ")
+  foodOne = input("Enter a food: ")
+  numberBox = int(input("Enter an integer: "))
+  foodTwo = input("Enter a food: ")
+  beverage = input("Enter a beverage: ")
+#enter prices of 3 products 
+  priceOne = float(input("Enter a number with a decimal: "))
+  priceTwo = float(input("Enter a number with a decimal: "))
+  priceThree = float(input("Enter a number with a deciaml: "))
+
+#calculation for sum of prices
+  totalCost = priceOne + priceTwo + priceThree 
+
+#inputs if the 'if statement' proves true
+  room = input("Enter a room in your house: ")
+  temperature = int(input("Enter a bigger integer: "))
+  minutes = int(input("Enter an integer: "))
+
+
+def printOut():
+  global bakedGood, familyMember, verb, ingredient, age, place, foodOne, numberBox, foodTwo, beverage, priceOne, priceTwo, priceThree, totalCost, room, temperature, minutes
+
+  print("Every year, we make " + bakedGood + " at Christmastime")
+  print("Baking has been a tradition since I was a kid!")
+  print(familyMember + " used to make most of the recipe back then, but I would always help " + verb + " " + ingredient)
+  print("Now that I am " + str(age) + ", I make the entire batch of " + bakedGood + " from scratch")
+  print("First, go to the " + place + " and find a bag of " + foodOne)
+  print("Next, grab " + str(numberBox) + " box of " + foodTwo + " and a carton of " + beverage)
+  print("You cross your fingers in line because you only have 15 dollars")
+
+  print("The total is " + str(totalCost) + " dollars")
+  #print rest of story if you have enough money to buy the ingredients
+  if totalCost < 15:
+    print("It turns out you can buy the ingredients!")
+    print("In the " + room + ", all you have to do is mix " + foodOne + " and " + beverage + " in a bowl until fluffy")
+    print("Dont forget the " + foodTwo + "!")
+    print("Then bake at " + str(temperature) + " degrees")
+    print("After " + str(minutes) + " minutes, you will have the perfect " + bakedGood + "!")
+  #end story short if you dont have enough money
+  else: 
+    print("Sadly, you cant buy the ingredients to bake")
+ 
+inputTask()
+printOut()
