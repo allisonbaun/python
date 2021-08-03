@@ -1,0 +1,42 @@
+'''
+Allison Baun
+Class 2 Game Design w Python
+Car Readout
+write a program that acts as the informational readout for a car
+'''
+
+def inputTask():
+  global fuelCapacity, fuelRemaining, milesTraveled, destinationDistance, usedFuel, milesPerGallon, milesInTank, distanceLeft
+
+#methods for getting inputs for calculations
+  fuelCapacity = int(input("Enter how much gas your tank can hold: "))
+  fuelRemaining = int(input("Enter how much gas is left: "))
+  milesTraveled = float(input("Enter how many miles you've traveled since you last filled your tank: "))
+  destinationDistance = float(input("How many miles away is your destination: "))
+
+#create method for amount of fuel used
+  usedFuel = fuelCapacity - fuelRemaining
+#create method for calculating miles per gallon 
+  milesPerGallon = milesTraveled / usedFuel
+
+#create methods for calculating miles left in tank and amount of distance left in trip
+  milesInTank = milesPerGallon * fuelRemaining
+  distanceLeft = destinationDistance - milesTraveled
+
+def printOut():
+  global fuelCapacity, fuelRemaining, milesTraveled, destinationDistance,usedFuel, milesPerGallon, milesInTank, distanceLeft
+
+#define statement that says whether or not theres enough gas in the tank for the distance left in the trip
+  print("Your car gets " + str(milesPerGallon) + " miles per gallon")
+  if milesInTank > distanceLeft:
+    print("You have enough fuel to complete your trip")
+  else:
+    print("You do not have enough fuel to complete your trip")
+
+
+inputTask()
+printOut()
+
+
+
+  
